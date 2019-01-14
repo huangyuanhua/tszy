@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script
+			  src="http://code.jquery.com/jquery-3.3.1.js"
+			  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+			  crossorigin="anonymous"></script>
+		<style>
+			img{
+				display: inline-block;
+				margin: 0 auto;
+				max-width: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="imgDiv" style="width: 80%;margin:0 auto;height: auto;">
+		</div>
+	</body>
+	<script>
+		//漫画网地址
+		var URLbegin= "https://mhpic.jumanhua.com/comic/T/%E9%80%8F%E8%A7%86%E4%B9%8B%E7%9C%BC%EF%BC%88%E7%B2%BE%E4%BF%AE%E7%89%88%EF%BC%89/";
+		var fileType = ".jpg-mht.middle";
+		var captionDecode = "%E8%AF%9DGQ/";
+		function pushImgUrl(captionNum,pageNum){
+			   var imgStr = "<img src='"+ URLbegin + captionNum + captionDecode + pageNum + fileType + "'>"
+			  $("#imgDiv").append(imgStr)
+		}
+		//开始章节
+		var mincaption = 35;
+		var maxcaption = 67;
+		var minpage = 1;
+		var maxpage = 10;
+		function loadImg(){
+			for(var ii = mincaption;ii<maxcaption;ii++){
+				for(var kk = minpage;kk<maxpage;kk++){
+					pushImgUrl(ii,kk);
+				}
+				//判断是否有更长的章节 有的话继续加载
+				//loadMore(ii,maxpage)
+			}
+		}
+		function loadMore(captionNum,pageNum){
+			var testUrl = URLbegin + captionNum + captionDecode + (++pageNum) + fileType;
+			if(isHasImg(testUrl)){
+				pushImgUrl(captionNum,pageNum);
+				loadMore(captionNum,pageNum);
+			}else{
+				continue;
+			}
+		}
+		//判断图片是否存在
+		function isHasImg(pathImg){
+			var ImgObj=new Image();
+			ImgObj.src= pathImg;
+			 if(ImgObj.fileSize > 0 || (ImgObj.width > 0 && ImgObj.height > 0))
+			 {
+			   return true;
+			 } else {
+			   return false;
+			}
+		}
+		
+		loadImg();
+	</script>
+</html>

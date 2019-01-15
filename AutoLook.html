@@ -96,6 +96,9 @@
 		<!-- <a href="javascript" class="shakeBtn">Shake Button</a> -->
 		<div id="imgDiv" style="width: 80%;margin:0 auto;height: auto;">
 		</div>
+		<div style="position: fixed;bottom: 0;height: auto;background-color: #00A1CB;width: 100%;">
+			<h5 id="heightL" style="color: #FFFFFF;"></h5>
+		</div>
 	</body>
 	<script>
 		function getFixed(obj){
@@ -180,10 +183,11 @@
 		}
 		var fatherIndex = 8;
 		$(window).scroll(function(){
-		　　var scrollTop = $(this).scrollTop();
+		　　var scrollTop = $(document).scrollTop();
 		　　var scrollHeight = $(document).height();
-		　　var windowHeight = $(this).height();
-		　　if(scrollTop + windowHeight == scrollHeight){
+		　　var windowHeight = $(window).height();
+		   $("#heightL").html("scrollTop:"+scrollTop+"/"+"windowHeight:"+windowHeight+"/scrollHeight:"+scrollHeight)
+		　　if(scrollTop + windowHeight >= scrollHeight){
 		　　　　	$("#"+ fatherIndex).attr("src",$("#"+fatherIndex).attr("_src"));
 			　　fatherIndex = fatherIndex+1;
 				$("#"+ fatherIndex).attr("src",$("#"+fatherIndex).attr("_src"));

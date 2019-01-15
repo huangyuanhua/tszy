@@ -4,44 +4,162 @@
 		<meta charset="utf-8">
 		<title></title>
 		<script
-			  src="jq.js"></script>
+			  <script src="jq.js"></script>
+			  <script src="jquery.cookie.js"></script>
 		<style>
 			img{
 				display: inline-block;
 				margin: 0 auto;
-				max-width: 100%;
+				max-width: 100%;		
 			}
+			.shakeBtn{
+				display: block;
+				width: 105px;
+				height: auto;
+				padding:2px 5px;
+				text-decoration: none;
+				color:#ffffff;
+				background-color: #00A1CB;
+				border: 1px solid #00A1CB;
+				border-radius: 3px;
+				animation:shake-chunk 4s ease-in-out infinite;  			
+			}
+			@keyframes shake-chunk{
+				2% {
+					transform: translate(-10px, 8px) rotate(5deg);
+				}
+				4% {
+					transform: translate(-6px, 14px) rotate(0deg);
+				}
+				6% {
+					transform: translate(-4px, -6px) rotate(-13deg);
+				}
+				8% {
+					transform: translate(-1px, -12px) rotate(4deg);
+				}
+				10% {
+					transform: translate(-2px, 10px) rotate(-14deg);
+				}
+				12% {
+					transform: translate(3px, -6px) rotate(12deg);
+				}
+				14% {
+					transform: translate(15px, 9px) rotate(-4deg);
+				}
+				16% {
+					transform: translate(3px, 9px) rotate(-2deg);
+				}
+				18% {
+					transform: translate(-11px, -6px) rotate(11deg);
+				}
+				20% {
+					transform: translate(2px, 11px) rotate(6deg);
+				}
+				22% {
+					transform: translate(-2px, -11px) rotate(2deg);
+				}
+				24% {
+					transform: translate(-5px, -2px) rotate(-13deg);
+				}
+				26% {
+					transform: translate(13px, -13px) rotate(11deg);
+				}
+				28% {
+					transform: translate(-10px, -12px) rotate(-1deg);
+				}
+				30% {
+					transform: translate(5px, 3px) rotate(-14deg);
+				}
+				32% {
+					transform: translate(-4px, 1px) rotate(-13deg);
+				}
+				34% {
+					transform: translate(-14px, -8px) rotate(2deg);
+				}
+				36% {
+					transform: translate(8px, -12px) rotate(13deg);
+				}
+				38% {
+					transform: translate(13px, -14px) rotate(-10deg);
+				}
+				0%, 40%, 100% {
+					transform: translate(0, 0) rotate(0);
+				}
+			}
+
+
+
+
 		</style>
 	</head>
 	<body>
+		<!-- <a href="javascript" class="shakeBtn">Shake Button</a> -->
 		<div id="imgDiv" style="width: 80%;margin:0 auto;height: auto;">
 		</div>
 	</body>
 	<script>
+		function getFixed(obj){
+　　//获取非行间属性
+　　function getStyle(obj,styleName){
+　　　　if (obj.currentStyle){
+　　　　　　return obj.currentStyle[styleName];
+　　　　}
+　　　　else{
+　　　　　　return getComputedStyle(obj,null)[styleName];
+　　　　}
+　　}
+　　//要获取图片相对网页顶部的距离，但图片有被定位的父级
+　　var iLeft=0;
+　　var iTop=0;
+　　var oParent=obj;
+　　while(oParent){
+　　　　if (oParent.tagName=="HTML"){
+　　　　　　break;
+　　　　}
+　　　　iLeft+=oParent.offsetLeft;
+　　　　iTop+=oParent.offsetTop;
+　　　　if (oParent!=obj){
+　　　　　　iLeft+=parseInt(getStyle(oParent,"borderWidth"));//offsetLeft不包括边框，因此要把边框加上
+　　　　　　iTop+=parseInt(getStyle(oParent,"borderWidth"));
+　　　　}
+　　　　oParent=oParent.offsetParent;
+　　}
+　　return [iLeft,iTop];//当 break 后itop就是图片相对网页顶部的距离
+}
+ 
 		//漫画网地址
-		var URLbegin= "https://mhpic.jumanhua.com/comic/T/%E9%80%8F%E8%A7%86%E4%B9%8B%E7%9C%BC%EF%BC%88%E7%B2%BE%E4%BF%AE%E7%89%88%EF%BC%89/";
+		var name = "斗破苍穹拆分版";
+		var namecode = encodeURI(name);
+		var URLbegin= "https://mhpic.jumanhua.com/comic/D/"+namecode+"/";
 		var fileType = ".jpg-mht.middle";
-		var captionDecode = "%E8%AF%9DGQ/";
-		function pushImgUrl(captionNum,pageNum){
-			   var imgStr = "<img src='"+ URLbegin + captionNum + captionDecode + pageNum + fileType + "'>"
-			  $("#imgDiv").append(imgStr)
+		var captionDecode = "%E8%AF%9D/";
+		function pushImgUrl(captionNum,pageNum,index){
+			var imgStr = "<img id="+ index +" _src='"+ URLbegin + captionNum + captionDecode + pageNum + fileType + "'>"
+			$("#imgDiv").append(imgStr)
 		}
 		//开始章节
-		var mincaption = 35;
-		var maxcaption = 67;
+		var mincaption = 1;
+		var maxcaption = 200;
 		var minpage = 1;
-		var maxpage = 10;
+		var maxpage = 8;
 		function loadImg(){
+			var index = 0;
 			for(var ii = mincaption;ii<maxcaption;ii++){
 				for(var kk = minpage;kk<maxpage;kk++){
-					pushImgUrl(ii,kk);
+					pushImgUrl(ii,kk,++index);
 				}
-				//判断是否有更长的章节 有的话继续加载
-				//loadMore(ii,maxpage)
 			}
+			$("#1").attr("src",$("#1").attr("_src"));
+			$("#2").attr("src",$("#2").attr("_src"));
+			$("#3").attr("src",$("#3").attr("_src"));
+			$("#4").attr("src",$("#4").attr("_src"));
+			$("#5").attr("src",$("#5").attr("_src"));
+			$("#6").attr("src",$("#6").attr("_src"));
+			$("#7").attr("src",$("#7").attr("_src"));
 		}
+		//判断下一章节是否已经更新 如果更新则继续加载并且增加分割线
 		function loadMore(captionNum,pageNum){
-			var testUrl = URLbegin + captionNum + captionDecode + (++pageNum) + fileType;
+			var testUrl = URLbegin + captionNum + captionDecode + pageNum + fileType;
 			if(isHasImg(testUrl)){
 				pushImgUrl(captionNum,pageNum);
 				loadMore(captionNum,pageNum);
@@ -60,7 +178,20 @@
 			   return false;
 			}
 		}
-		
+		var fatherIndex = 8;
+		$(window).scroll(function(){
+		　　var scrollTop = $(this).scrollTop();
+		　　var scrollHeight = $(document).height();
+		　　var windowHeight = $(this).height();
+		　　if(scrollTop + windowHeight == scrollHeight){
+		　　　　	$("#"+ fatherIndex).attr("src",$("#"+fatherIndex).attr("_src"));
+			　　fatherIndex = fatherIndex+1;
+				$("#"+ fatherIndex).attr("src",$("#"+fatherIndex).attr("_src"));
+				fatherIndex = fatherIndex+1;
+				$("#"+ fatherIndex).attr("src",$("#"+fatherIndex).attr("_src"));
+			    fatherIndex = fatherIndex+1;
+			}
+		});		
 		loadImg();
 	</script>
 </html>

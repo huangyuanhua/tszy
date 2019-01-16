@@ -86,10 +86,6 @@
 					transform: translate(0, 0) rotate(0);
 				}
 			}
-
-
-
-
 		</style>
 	</head>
 	<body>
@@ -101,35 +97,6 @@
 		</div>
 	</body>
 	<script>
-		function getFixed(obj){
-　　//获取非行间属性
-　　function getStyle(obj,styleName){
-　　　　if (obj.currentStyle){
-　　　　　　return obj.currentStyle[styleName];
-　　　　}
-　　　　else{
-　　　　　　return getComputedStyle(obj,null)[styleName];
-　　　　}
-　　}
-　　//要获取图片相对网页顶部的距离，但图片有被定位的父级
-　　var iLeft=0;
-　　var iTop=0;
-　　var oParent=obj;
-　　while(oParent){
-　　　　if (oParent.tagName=="HTML"){
-　　　　　　break;
-　　　　}
-　　　　iLeft+=oParent.offsetLeft;
-　　　　iTop+=oParent.offsetTop;
-　　　　if (oParent!=obj){
-　　　　　　iLeft+=parseInt(getStyle(oParent,"borderWidth"));//offsetLeft不包括边框，因此要把边框加上
-　　　　　　iTop+=parseInt(getStyle(oParent,"borderWidth"));
-　　　　}
-　　　　oParent=oParent.offsetParent;
-　　}
-　　return [iLeft,iTop];//当 break 后itop就是图片相对网页顶部的距离
-}
- 
 		//漫画网地址
 		var name = "斗破苍穹拆分版";
 		var namecode = encodeURI(name);
@@ -187,13 +154,16 @@
 		　　var scrollHeight = $(document).height();
 		　　var windowHeight = $(window).height();
 		   $("#heightL").html("scrollTop:"+scrollTop+"/"+"windowHeight:"+windowHeight+"/scrollHeight:"+scrollHeight)
-		　　if(scrollTop + windowHeight >= scrollHeight){
+		　　if(scrollTop + windowHeight >= scrollHeight-50){
 		　　　　	$("#"+ fatherIndex).attr("src",$("#"+fatherIndex).attr("_src"));
 			　　fatherIndex = fatherIndex+1;
 				$("#"+ fatherIndex).attr("src",$("#"+fatherIndex).attr("_src"));
 				fatherIndex = fatherIndex+1;
 				$("#"+ fatherIndex).attr("src",$("#"+fatherIndex).attr("_src"));
 			    fatherIndex = fatherIndex+1;
+				$("#"+ (fatherIndex-8)).remove();
+				$("#"+ (fatherIndex-9)).remove();
+				$("#"+ (fatherIndex-10)).remove();
 			}
 		});		
 		loadImg();
